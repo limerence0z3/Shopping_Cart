@@ -120,5 +120,31 @@ class TestShoppingCart(unittest.TestCase):
 
         self.assertEqual(actual_output, expected_output)
 
+    # 測試購物車刪除功能
+    def test_delete_item_from_cart(self):
+        cart = self.cart
+        product_id = 1
+
+        # 添加商品到購物車
+        cart.add_to_cart(product_id)
+
+        # 確認商品已加入購物車
+        self.assertIn(product_id, [item['id'] for item in cart.shopping_cart])
+
+        # catch 刪除操作的輸出
+        expected_output = f"\n{cart.products[product_id]['name']} 已從購物車中移除。\n"
+        sys.stdout = StringIO()
+        cart.delete_item_from_cart(product_id)
+        actual_output = sys.stdout.getvalue()
+        sys.stdout = sys.__stdout__
+
+        # 確認刪除操作的輸出
+        self.assertEqual(actual_output, expected_output)
+
+        # 確認商品已從購物車移除
+        self.assertNotIn(product_id, [item['id'] for item in cart.shopping_cart])
+
+        
+
 if __name__ == '__main__':
     unittest.main()
